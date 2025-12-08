@@ -1,0 +1,15 @@
+---
+- name: Configuration de l'infrastructure Cloud-1
+  hosts: webservers        # On cible le groupe défini dans inventory.ini
+  become: yes              # On devient "root" (sudo) pour installer des paquets
+  
+  # On va définir des variables globales ici plus tard
+  vars:
+    pip_install_packages:
+      - name: docker
+
+  # Liste des rôles à exécuter dans l'ordre
+  roles:
+    - common
+    - docker
+    - inception

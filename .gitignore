@@ -1,0 +1,29 @@
+# --- SÉCURITÉ (CRITIQUE) ---
+.vault_pass
+*.pem
+*.key
+id_rsa
+.env
+
+# --- PYTHON & ANSIBLE ---
+# L'environnement virtuel (lourd et inutile sur git)
+venv/
+env/
+.venv/
+
+# Fichiers compilés Python
+__pycache__/
+*.pyc
+
+# Fichiers de retry Ansible (créés quand un playbook échoue)
+*.retry
+
+# --- SYSTÈME & IDE ---
+# Mac OS
+.DS_Store
+
+# VS Code / JetBrains (fichiers de config de ton éditeur)
+.vscode/
+.idea/
+
+note
