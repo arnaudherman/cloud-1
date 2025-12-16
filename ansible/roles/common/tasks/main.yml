@@ -1,19 +1,15 @@
 ---
-# 1. Toujours mettre à jour le cache des paquets avant d'installer quoi que ce soit
-# C'est l'équivalent d'un "apt-get update"
 - name: Mettre à jour le cache APT
   apt:
     update_cache: yes
-    cache_valid_time: 3600  # Ne le refait pas si fait il y a moins d'1h
+    cache_valid_time: 3600
 
-# 2. Installation des paquets essentiels
-# "state: present" veut dire "assure-toi que c'est là". Si c'est déjà là, il ne fait rien.
 - name: Installer les paquets de base
   apt:
     name:
-      - vim       # Pour éditer des fichiers si besoin
-      - git       # Indispensable
-      - curl      # Pour télécharger des trucs
-      - htop      # Pour surveiller la RAM/CPU
-      - python3-pip # Pour installer des modules Python
+      - vim
+      - git
+      - curl
+      - htop
+      - python3-pip
     state: present

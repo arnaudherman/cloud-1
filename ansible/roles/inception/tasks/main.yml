@@ -1,4 +1,3 @@
-# roles/inception/tasks/main.yml
 ---
 - name: Créer le dossier pour l'application Inception
   file:
@@ -12,17 +11,15 @@
     dest: /home/ubuntu/inception/docker-compose.yml
     mode: '0644'
 
-# Note le "_v2" à la fin du nom du module ci-dessous
 - name: Arrêter les anciens conteneurs (au cas où)
   community.docker.docker_compose_v2:
     project_src: /home/ubuntu/inception
     state: absent
   ignore_errors: yes
 
-# Note le "_v2" à la fin du nom du module ci-dessous
 - name: Lancer la stack Inception (WordPress + MariaDB + PhpMyAdmin)
   community.docker.docker_compose_v2:
     project_src: /home/ubuntu/inception
     state: present
-    build: always # Force la construction si besoin
-    pull: always  # S'assure d'avoir les dernières images
+    build: always
+    pull: always
