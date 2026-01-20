@@ -4,22 +4,130 @@
     path: /home/ubuntu/inception
     state: directory
     mode: '0755'
+  tags:
+    - always
+    - inception
 
 - name: Copier le fichier docker-compose.yml (avec injection des variables)
   template:
     src: docker-compose.yml.j2
     dest: /home/ubuntu/inception/docker-compose.yml
     mode: '0644'
+  tags:
+    - always
+    - inception
+    - config
 
-- name: Arrêter les anciens conteneurs (au cas où)
+- name: Arrêter tous les conteneurs
   community.docker.docker_compose_v2:
     project_src: /home/ubuntu/inception
     state: absent
   ignore_errors: yes
+  tags:
+    - never # `never` tag ensures those tasks only run when explicitly called with their specific tag
+    - stop
+    - clean
 
-- name: Lancer la stack Inception (WordPress + MariaDB + PhpMyAdmin)
+- name: Lancer uniquement Traefik
+  community.docker.docker_compose_v2:
+    project_src: /home/ubuntu/inception
+    services:
+      - traefik
+    state: present
+    pull: always
+  tags:
+    - never
+    - traefik
+
+- name: Arrêter Traefik
+  community.docker.docker_compose_v2:
+    project_src: /home/ubuntu/inception
+    services:
+      - traefik
+    state: stopped
+  tags:
+    - never
+    - stop-traefik
+
+- name: Lancer uniquement MariaDB
+  community.docker.docker_compose_v2:
+    project_src: /home/ubuntu/inception
+    services:
+      - mariadb
+    state: present
+    pull: always
+  tags:
+    - never
+    - mariadb
+    - database
+
+- name: Arrêter MariaDB
+  community.docker.docker_compose_v2:
+    project_src: /home/ubuntu/inception
+    services:
+      - mariadb
+    state: stopped
+  tags:
+    - never
+    - stop-mariadb
+
+- name: Lancer uniquement WordPress
+  community.docker.docker_compose_v2:
+    project_src: /home/ubuntu/inception
+    services:
+      - wordpress
+    state: present
+    pull: always
+  tags:
+    - never
+    - wordpress
+
+- name: Arrêter WordPress
+  community.docker.docker_compose_v2:
+    project_src: /home/ubuntu/inception
+    services:
+      - wordpress
+    state: stopped
+  tags:
+    - never
+    - stop-wordpress
+
+- name: Lancer uniquement PhpMyAdmin
+  community.docker.docker_compose_v2:
+    project_src: /home/ubuntu/inception
+    services:
+      - phpmyadmin
+    state: present
+    pull: always
+  tags:
+    - never
+    - phpmyadmin
+    - pma
+
+- name: Arrêter PhpMyAdmin
+  community.docker.docker_compose_v2:
+    project_src: /home/ubuntu/inception
+    services:
+      - phpmyadmin
+    state: stopped
+  tags:
+    - never
+    - stop-phpmyadmin
+
+- name: Lancer la stack complète Inception
   community.docker.docker_compose_v2:
     project_src: /home/ubuntu/inception
     state: present
-    build: always
     pull: always
+  tags:
+    - inception
+    - start
+    - all
+
+- name: Redémarrer tous les services
+  community.docker.docker_compose_v2:
+    project_src: /home/ubuntu/inception
+    state: restarted
+  tags:
+    - never
+    - restart
