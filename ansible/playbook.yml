@@ -11,3 +11,28 @@
     - common
     - docker
     - inception
+
+# Deploy everything (default)
+# ansible-playbook playbook.yml --vault-password-file .vault_pass
+
+# # Deploy only specific services
+# ansible-playbook playbook.yml --vault-password-file .vault_pass --tags traefik
+# ansible-playbook playbook.yml --vault-password-file .vault_pass --tags mariadb
+# ansible-playbook playbook.yml --vault-password-file .vault_pass --tags wordpress
+# ansible-playbook playbook.yml --vault-password-file .vault_pass --tags phpmyadmin
+
+# # Stop specific services
+# ansible-playbook playbook.yml --vault-password-file .vault_pass --tags stop-traefik
+# ansible-playbook playbook.yml --vault-password-file .vault_pass --tags stop-wordpress
+
+# # Stop all services
+# ansible-playbook playbook.yml --vault-password-file .vault_pass --tags stop
+
+# # Restart all services
+# ansible-playbook playbook.yml --vault-password-file .vault_pass --tags restart
+
+# # Update configuration only
+# ansible-playbook playbook.yml --vault-password-file .vault_pass --tags config
+
+# # Deploy multiple services
+# ansible-playbook playbook.yml --vault-password-file .vault_pass --tags "mariadb,wordpress"
